@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Productos</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/" class="btn-inicio">Inicio</a>
+            <h1>Sistema de Gestión de Productos</h1>
+            <p class="subtitle">Microservicio App02 - Spring Boot</p>
+        </header>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <h3>Total Productos</h3>
+                <p class="stat-number" th:text="${totalProductos}">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Última Actualización</h3>
+                <p class="stat-date" th:text="${fechaActual}">--/--/----</p>
+            </div>
+            <div class="stat-card highlight">
+                <h3>Servicio</h3>
+                <p class="stat-service" th:text="${servicio}">App02</p>
+            </div>
+        </div>
+
+        <div class="actions">
+            <a th:href="@{/productos/nuevo}" class="btn btn-primary">Nuevo Producto</a>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Categoría</th>
+                        <th>Stock</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="producto : ${productos}">
+                        <td th:text="${producto.id}">1</td>
+                        <td th:text="${producto.nombre}">Producto</td>
+                        <td th:text="'S/. ' + ${#numbers.formatDecimal(producto.precio, 1, 2)}">S/. 0.00</td>
+                        <td th:text="${producto.categoria}">Categoría</td>
+                        <td th:text="${producto.stock}">0</td>
+                        <td class="actions-cell">
+                            <a th:href="@{/productos/editar/{id}(id=${producto.id})}" class="btn btn-edit">Editar</a>
+                            <a th:href="@{/productos/eliminar/{id}(id=${producto.id})}" class="btn btn-delete" onclick="return confirm('¿Está seguro de eliminar este producto?')">Eliminar</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="pagination">
+                <a th:href="@{/productos(page=${currentPage - 1})}"
+                   th:class="${currentPage == 0} ? 'disabled' : ''"
+                   th:if="${currentPage > 0}">Anterior</a>
+                <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                    <a th:href="@{/productos(page=${i})}"
+                       th:text="${i + 1}"
+                       th:class="${i == currentPage} ? 'active' : ''">1</a>
+                </span>
+                <a th:href="@{/productos(page=${currentPage + 1})}"
+                   th:class="${currentPage + 1 >= totalPages} ? 'disabled' : ''"
+                   th:if="${currentPage + 1 < totalPages}">Siguiente</a>
+            </div>
+        </div>
+
+        <footer>
+            <p>Ejecutándose en puerto: <strong th:text="${puerto}">6001</strong></p>
+            <p class="tech">Java Spring Boot + PostgreSQL + Nginx Load Balancer</p>
+        </footer>
+    </div>
+</body>
+</html>

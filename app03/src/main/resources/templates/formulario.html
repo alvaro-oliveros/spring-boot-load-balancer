@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Proveedor</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/" class="btn-inicio">Inicio</a>
+            <h1 th:text="${proveedor.id != null} ? 'Editar Proveedor' : 'Nuevo Proveedor'">Formulario Proveedor</h1>
+            <p class="subtitle">Microservicio App03 - Spring Boot</p>
+        </header>
+
+        <div class="form-container">
+            <form th:action="@{/proveedores/guardar}" th:object="${proveedor}" method="post">
+                <input type="hidden" th:field="*{id}">
+
+                <div class="form-group">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" th:field="*{nombre}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" th:field="*{email}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefono">Teléfono:</label>
+                    <input type="text" id="telefono" th:field="*{telefono}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="ciudad">Ciudad:</label>
+                    <input type="text" id="ciudad" th:field="*{ciudad}" required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <a th:href="@{/proveedores}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+
+        <footer>
+            <p>Ejecutándose en puerto: <strong th:text="${puerto}">7001</strong></p>
+            <p class="tech">Java Spring Boot + PostgreSQL + Nginx Load Balancer</p>
+        </footer>
+    </div>
+</body>
+</html>

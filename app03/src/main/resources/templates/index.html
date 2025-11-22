@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Proveedores</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/" class="btn-inicio">Inicio</a>
+            <h1>Sistema de Gestión de Proveedores</h1>
+            <p class="subtitle">Microservicio App03 - Spring Boot</p>
+        </header>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <h3>Total Proveedores</h3>
+                <p class="stat-number" th:text="${totalProveedores}">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Última Actualización</h3>
+                <p class="stat-date" th:text="${fechaActual}">--/--/----</p>
+            </div>
+            <div class="stat-card highlight">
+                <h3>Servicio</h3>
+                <p class="stat-service" th:text="${servicio}">App03</p>
+            </div>
+        </div>
+
+        <div class="actions">
+            <a th:href="@{/proveedores/nuevo}" class="btn btn-primary">Nuevo Proveedor</a>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Ciudad</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="proveedor : ${proveedores}">
+                        <td th:text="${proveedor.id}">1</td>
+                        <td th:text="${proveedor.nombre}">Nombre</td>
+                        <td th:text="${proveedor.email}">email@example.com</td>
+                        <td th:text="${proveedor.telefono}">+51 000 000 000</td>
+                        <td th:text="${proveedor.ciudad}">Ciudad</td>
+                        <td class="actions-cell">
+                            <a th:href="@{/proveedores/editar/{id}(id=${proveedor.id})}" class="btn btn-edit">Editar</a>
+                            <a th:href="@{/proveedores/eliminar/{id}(id=${proveedor.id})}" class="btn btn-delete" onclick="return confirm('¿Está seguro de eliminar este proveedor?')">Eliminar</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="pagination">
+                <a th:href="@{/proveedores(page=${currentPage - 1})}"
+                   th:class="${currentPage == 0} ? 'disabled' : ''"
+                   th:if="${currentPage > 0}">Anterior</a>
+                <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                    <a th:href="@{/proveedores(page=${i})}"
+                       th:text="${i + 1}"
+                       th:class="${i == currentPage} ? 'active' : ''">1</a>
+                </span>
+                <a th:href="@{/proveedores(page=${currentPage + 1})}"
+                   th:class="${currentPage + 1 >= totalPages} ? 'disabled' : ''"
+                   th:if="${currentPage + 1 < totalPages}">Siguiente</a>
+            </div>
+        </div>
+
+        <footer>
+            <p>Ejecutándose en puerto: <strong th:text="${puerto}">7001</strong></p>
+            <p class="tech">Java Spring Boot + PostgreSQL + Nginx Load Balancer</p>
+        </footer>
+    </div>
+</body>
+</html>
